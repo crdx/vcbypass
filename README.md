@@ -1,13 +1,13 @@
-# VisualCaptcha-bypasser
+# vcbypass
 
-**VisualCaptcha-bypasser** is a small Python script that trivially bypasses Visual Captcha.
+**vcbypass** is a small Python script that trivially bypasses Visual Captcha.
 
 ## Bugs or contributions
 
-Open an [issue](http://github.com/crdx/VisualCaptcha-bypasser/issues) or send a [pull request](http://github.com/crdx/VisualCaptcha-bypasser/pulls).
+Open an [issue](http://github.com/crdx/vcbypass/issues) or send a [pull request](http://github.com/crdx/vcbypass/pulls).
 
 ## Licence
 
 [MIT](LICENCE.md).
 
-<!-- Images: ![Alt Text](https://raw.github.com/crdx/VisualCaptcha-bypasser/master/...) -->
+<!-- Images: ![Alt Text](https://raw.github.com/crdx/vcbypass/master/...) -->
