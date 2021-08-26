@@ -4,7 +4,7 @@
 
 ## Bugs or contributions
 
-Open an [issue](http://github.com/crdx/vcbypass/issues) or send a [pull request](http://github.com/crdx/vcbypass/pulls).
+Open an [issue](https://github.com/crdx/vcbypass/issues) or send a [pull request](https://github.com/crdx/vcbypass/pulls).
 
 ## Licence
 
