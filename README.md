@@ -2,7 +2,7 @@
 
 **vcbypass** is a small Python script that trivially bypasses Visual Captcha.
 
-## Bugs or contributions
+## Contributions
 
 Open an [issue](https://github.com/crdx/vcbypass/issues) or send a [pull request](https://github.com/crdx/vcbypass/pulls).
 
