@@ -9,5 +9,3 @@ Open an [issue](https://github.com/crdx/vcbypass/issues) or send a [pull request
 ## Licence
 
 [GPLv3](LICENCE).
-
-<!-- Images: ![Alt Text](https://raw.github.com/crdx/vcbypass/master/...) -->
